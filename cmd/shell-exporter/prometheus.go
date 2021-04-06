@@ -20,19 +20,6 @@ type PromMetrics struct {
 	Metrics []PromMetric
 }
 
-func (pm *PromMetrics) ReadFromFile(fname string) (err error) {
-	file, err := os.Open(fname)
-	if err != nil {
-		return
-	}
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&pm.Metrics)
-	if err != nil {
-		return
-	}
-	return
-}
-
 type PromExporter struct {
 	registry    *prometheus.Registry
 	httpHandler http.Handler
@@ -74,6 +61,19 @@ func (pe *PromExporter) Serve() (err error) {
 func (pe *PromExporter) NewGaugeVec(opts prometheus.GaugeOpts, labelNames []string) (pg *prometheus.GaugeVec) {
 	pg = prometheus.NewGaugeVec(opts, labelNames)
 	pe.registry.MustRegister(pg)
+	return
+}
+
+func (pm *PromMetrics) ReadFromFile(fname string) (err error) {
+	file, err := os.Open(fname)
+	if err != nil {
+		return
+	}
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&pm.Metrics)
+	if err != nil {
+		return
+	}
 	return
 }
 
