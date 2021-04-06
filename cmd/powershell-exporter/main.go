@@ -8,18 +8,14 @@ import (
 
 func main() {
 
-	p := PromMetrics{
-		metrics: []PromMetric{
-			{
-				value: 0,
-				labels: map[string]string{
-					"hello": "hi",
-				},
-			},
-		},
+	p := PromMetrics{}
+	p.ReadFromFile("/workspaces/powershell_exporter/examples/pse_tcp_connection_metrics.example.json")
+
+	var metric_labels []string
+
+	for lk, _ := range p.Metrics[0].Labels {
+		metric_labels = append(metric_labels, lk)
 	}
-	// p.ReadFromFile("/workspaces/powershell_exporter/examples/pse_tcp_connection_metrics.example.json")
-	p.SaveConfig("/tmp/123.json")
 
 	pe := NewPromExporter()
 
@@ -27,14 +23,11 @@ func main() {
 		Name: "Test",
 		Help: "TestHelp",
 	},
-		[]string{
-			"one",
-			"two",
-		})
-	// pg.Set(123)
+		metric_labels)
 
-	pg.With(prometheus.Labels{"one": "3", "two": "4"}).Set(444)
-	// pg.WithLabelValues("hello", "kitty").Set(123)
+	for mi, _ := range p.Metrics {
+		pg.With(p.Metrics[mi].Labels).Set(float64(p.Metrics[mi].Value))
+	}
 
 	pe.Serve()
 

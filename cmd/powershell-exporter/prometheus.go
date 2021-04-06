@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -11,12 +10,12 @@ import (
 )
 
 type PromMetric struct {
-	value  int               `json:"value"`
-	labels map[string]string `json:"labels"`
+	Value  int               `json:"value"`
+	Labels map[string]string `json:"labels"`
 }
 
 type PromMetrics struct {
-	metrics []PromMetric `json:"metrics"`
+	Metrics []PromMetric
 }
 
 func (pm *PromMetrics) ReadFromFile(fname string) (err error) {
@@ -25,19 +24,10 @@ func (pm *PromMetrics) ReadFromFile(fname string) (err error) {
 		return
 	}
 	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&pm.metrics)
+	err = decoder.Decode(&pm.Metrics)
 	if err != nil {
 		return
 	}
-	return
-}
-
-func (pm *PromMetrics) SaveConfig(fname string) (err error) {
-	file, err := json.MarshalIndent(pm, "", " ")
-	if err != nil {
-		return
-	}
-	err = ioutil.WriteFile(fname, file, 0644)
 	return
 }
 
