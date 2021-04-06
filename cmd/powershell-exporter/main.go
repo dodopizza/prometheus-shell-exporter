@@ -2,33 +2,18 @@ package main
 
 import (
 	"os"
-
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 func main() {
 
-	p := PromMetrics{}
-	p.ReadFromFile("/workspaces/powershell_exporter/examples/pse_tcp_connection_metrics.example.json")
-
-	var metric_labels []string
-
-	for lk, _ := range p.Metrics[0].Labels {
-		metric_labels = append(metric_labels, lk)
-	}
+	p1 := PromMetrics{}
+	p2 := PromMetrics{}
+	p1.ReadFromFile("/workspaces/powershell_exporter/examples/pse_tcp_connection_metrics.example.json")
+	p2.ReadFromFile("/workspaces/powershell_exporter/examples/pse_tcp_dynamic_port_range_number_of_ports.example.json")
 
 	pe := NewPromExporter()
-
-	pg := pe.NewGaugeVec(prometheus.GaugeOpts{
-		Name: "Test",
-		Help: "TestHelp",
-	},
-		metric_labels)
-
-	for mi, _ := range p.Metrics {
-		pg.With(p.Metrics[mi].Labels).Set(float64(p.Metrics[mi].Value))
-	}
-
+	pe.NewGaugeVecFromPromMetrics("HelloKitty", p1)
+	pe.NewGaugeVecFromPromMetrics("HelloPuppy", p2)
 	pe.Serve()
 
 	os.Exit(0)

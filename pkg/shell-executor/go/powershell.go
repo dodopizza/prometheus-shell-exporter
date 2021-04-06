@@ -1,26 +1,24 @@
-package powershell
+package shell_executor
 
 import (
 	"bytes"
 	"os/exec"
 )
 
-// PowerShell struct
 type PowerShell struct {
-	powerShell string
+	shell string
 }
 
-// New create new session
-func New() *PowerShell {
+func NewPowerShellExecutor() IShellExecutor {
 	ps, _ := exec.LookPath("powershell.exe")
 	return &PowerShell{
-		powerShell: ps,
+		shell: ps,
 	}
 }
 
 func (p *PowerShell) Execute(args ...string) (stdOut string, stdErr string, err error) {
 	args = append([]string{"-NoProfile", "-NonInteractive"}, args...)
-	cmd := exec.Command(p.powerShell, args...)
+	cmd := exec.Command(p.shell, args...)
 
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer

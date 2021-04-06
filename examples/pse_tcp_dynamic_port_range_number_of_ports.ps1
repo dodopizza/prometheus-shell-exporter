@@ -1,4 +1,5 @@
 @(
+	@{}
     @{
         # metric value
         'value' = (Get-NetTCPSetting -SettingName 'Datacenter' ).DynamicPortRangeNumberOfPorts

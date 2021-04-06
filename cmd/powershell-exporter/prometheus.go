@@ -43,6 +43,24 @@ func NewPromExporter() *PromExporter {
 	return pe
 }
 
+func (pe *PromExporter) NewGaugeVecFromPromMetrics(metricName string, promMetrics PromMetrics) {
+	var metric_labels []string
+
+	for lk, _ := range promMetrics.Metrics[0].Labels {
+		metric_labels = append(metric_labels, lk)
+	}
+
+	pg := pe.NewGaugeVec(prometheus.GaugeOpts{
+		Name: metricName,
+		Help: "TestHelp",
+	},
+		metric_labels)
+
+	for mi, _ := range promMetrics.Metrics {
+		pg.With(promMetrics.Metrics[mi].Labels).Set(float64(promMetrics.Metrics[mi].Value))
+	}
+}
+
 func (pe *PromExporter) Serve() (err error) {
 	http.Handle("/metrics", pe.httpHandler)
 	err = http.ListenAndServe(":4567", nil)
