@@ -21,10 +21,10 @@ function gauge_vector(){
         --arg label2 "${3}" \
         '{
             "value": $value | tonumber,
-            "labels": [
-                { "label1": $label1 },
-                { "label2": $label2 }
-            ]
+            "labels": {
+                "label1": $label1,
+                "label2": $label2
+            }
         }'
 }
 

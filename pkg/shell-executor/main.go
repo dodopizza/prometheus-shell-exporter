@@ -1,7 +1,7 @@
 package main
 
 import (
-	PS "github.com/dodopizza/powershell-exporter/pkg/shell-executor/go"
+	PS "github.com/dodopizza/prometheus-shell-exporter/pkg/shell-executor/go"
 )
 
 func main() {

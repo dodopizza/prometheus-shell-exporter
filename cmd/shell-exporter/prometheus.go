@@ -1,4 +1,4 @@
-package shell_exporter
+package main
 
 import (
 	"encoding/json"

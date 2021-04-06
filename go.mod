@@ -1,4 +1,4 @@
-module github.com/dodopizza/powershell-exporter
+module github.com/dodopizza/prometheus-shell-exporter
 
 go 1.15
 
