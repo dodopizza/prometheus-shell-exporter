@@ -13,11 +13,15 @@ func main() {
 	}
 
 	pe := NewPromExporter()
+	pm := []*PromMetrics{}
 
 	for _, script := range scripts {
-		p := PromMetrics{}
+		p := PromMetrics{
+			Name: sanitizePromLabelName(GetFileName(script)),
+		}
 		p.ReadFromFile(script)
-		pe.NewGaugeVecFromPromMetrics(sanitizePromLabelName(GetFileName(script)), p)
+		pe.NewGaugeVecFromPromMetrics(p)
+		pm = append(pm, &p)
 	}
 
 	err = pe.Serve()

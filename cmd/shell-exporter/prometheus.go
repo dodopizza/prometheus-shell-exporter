@@ -16,6 +16,7 @@ type PromMetric struct {
 }
 
 type PromMetrics struct {
+	Name    string
 	Metrics []PromMetric
 }
 
@@ -44,7 +45,7 @@ func NewPromExporter() *PromExporter {
 	return pe
 }
 
-func (pe *PromExporter) NewGaugeVecFromPromMetrics(metricName string, promMetrics PromMetrics) {
+func (pe *PromExporter) NewGaugeVecFromPromMetrics(promMetrics PromMetrics) {
 	var metric_labels []string
 
 	for lk, _ := range promMetrics.Metrics[0].Labels {
@@ -52,8 +53,7 @@ func (pe *PromExporter) NewGaugeVecFromPromMetrics(metricName string, promMetric
 	}
 
 	pg := pe.NewGaugeVec(prometheus.GaugeOpts{
-		Name: metricName,
-		Help: "TestHelp",
+		Name: promMetrics.Name,
 	},
 		metric_labels)
 
