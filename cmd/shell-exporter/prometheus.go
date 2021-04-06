@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"regexp"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -76,21 +77,11 @@ func (pe *PromExporter) NewGaugeVec(opts prometheus.GaugeOpts, labelNames []stri
 	return
 }
 
-// func prom() {
-// 	promRegistry := prometheus.NewRegistry()
-// 	promHandler := promhttp.HandlerFor(promRegistry, promhttp.HandlerOpts{})
-
-// 	gaugeOpts := prometheus.GaugeOpts{
-// 		Name:        "Test",
-// 		Help:        "TestHelp",
-// 		ConstLabels: map[string]string{},
-// 	}
-// 	gc := prometheus.NewGauge(gaugeOpts)
-// 	promRegistry.MustRegister(gc)
-
-// 	http.Handle("/metrics", promHandler)
-// 	err := http.ListenAndServe(":4567", nil)
-// 	if err != nil {
-// 		log.Printf("http.ListenAndServer: %v\n", err)
-// 	}
-// }
+// sanitizePromLabelName -
+func sanitizePromLabelName(str string) string {
+	re := regexp.MustCompile(`[\.\-]`)
+	result := re.ReplaceAllString(str, "_")
+	re = regexp.MustCompile(`^\d`)
+	result = re.ReplaceAllString(result, "_$0")
+	return result
+}
