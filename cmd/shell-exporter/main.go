@@ -3,22 +3,59 @@ package main
 import (
 	"errors"
 	"os"
+	"path/filepath"
+	"regexp"
 )
+
+// sanitizePromLabelName -
+func sanitizePromLabelName(str string) string {
+	re := regexp.MustCompile(`[\.\-]`)
+	result := re.ReplaceAllString(str, "_")
+	re = regexp.MustCompile(`^\d`)
+	result = re.ReplaceAllString(result, "_$0")
+	return result
+}
+
+// getScriptsInDir -
+func getScriptsInDir(dir string, pattern string) (fNames []string, err error) {
+	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		if matched, err := filepath.Match(pattern, filepath.Base(path)); err != nil {
+			return err
+		} else if matched {
+			fNames = append(fNames, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return fNames, nil
+}
 
 func main() {
 
-	p1 := PromMetrics{}
-	p2 := PromMetrics{}
-	p3 := PromMetrics{}
-	p1.ReadFromFile("/workspaces/prometheus-shell-exporter/examples/pse_tcp_connection_metrics.example.json")
-	p2.ReadFromFile("/workspaces/prometheus-shell-exporter/examples/pse_tcp_dynamic_port_range_number_of_ports.example.json")
-	p3.ReadFromFile("/workspaces/prometheus-shell-exporter/examples/pse_example.json")
+	scripts, err := getScriptsInDir("/workspaces/prometheus-shell-exporter/examples", "*.json")
+	if err != nil {
+		errors.New(err.Error())
+	}
 
 	pe := NewPromExporter()
-	pe.NewGaugeVecFromPromMetrics("HelloKitty", p1)
-	pe.NewGaugeVecFromPromMetrics("HelloPuppy", p2)
-	pe.NewGaugeVecFromPromMetrics("HelloGleb", p3)
-	err := pe.Serve()
+
+	for _, script := range scripts {
+		scriptBaseName := filepath.Base(script)
+		metricName := scriptBaseName[0 : len(scriptBaseName)-len(filepath.Ext(scriptBaseName))]
+		p := PromMetrics{}
+		p.ReadFromFile(script)
+		pe.NewGaugeVecFromPromMetrics(sanitizePromLabelName(metricName), p)
+	}
+
+	err = pe.Serve()
 	if err != nil {
 		errors.New(err.Error())
 	}
