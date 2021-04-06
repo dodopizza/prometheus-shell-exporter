@@ -1,0 +1,247 @@
+[
+    {
+        "value": 3,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-alertserver-api.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 3,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-alertserver-api.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 250,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-auth.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 250,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-auth.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 58,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-gsite-services.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 58,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-gsite-services.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 27,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-officemanager.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 27,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-officemanager.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 2,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-settings.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 1,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-settings.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 9,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-admin.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 9,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-admin.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 8,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-api.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 7,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-api.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 8,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-taskserver.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 8,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-taskserver.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 3,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-callcenter-api.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 3,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-callcenter-api.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 47,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-cashier.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 42,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-cashier.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 4,
+        "labels": {
+            "state": "CloseWait",
+            "service": "ru-prod-cashier.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 17,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-callcenter.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 17,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-callcenter.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 28,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-mapi-services.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 28,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-mapi-services.int.we.dodois.com"
+        }
+    },
+    {
+        "value": 47,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-shiftmanager.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 43,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-shiftmanager.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 3,
+        "labels": {
+            "state": "CloseWait",
+            "service": "ru-prod-shiftmanager.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 7,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-restaurantboard.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 7,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-restaurantboard.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 13,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-personal.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 13,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-personal.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 10,
+        "labels": {
+            "state": "Bound",
+            "service": "ru-prod-cashhardware.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 9,
+        "labels": {
+            "state": "Established",
+            "service": "ru-prod-cashhardware.ext.we.dodois.com"
+        }
+    },
+    {
+        "value": 1,
+        "labels": {
+            "state": "CloseWait",
+            "service": "ru-prod-cashhardware.ext.we.dodois.com"
+        }
+    }
+]
