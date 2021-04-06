@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	ps := PS.NewShellExecutor("/workspaces/powershell_exporter/examples/pse_example.sh")
-	stdOut, stdErr, err := ps.Execute()
+	ps := PS.NewShellExecutor("bash")
+	stdOut, stdErr, err := ps.Execute("-c", "/workspaces/powershell_exporter/examples/pse_example.sh")
 	if err != nil {
 		println(err.Error())
 	}

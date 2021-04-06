@@ -10,5 +10,5 @@ template='[
     }
 ]'
 
-echo $template | jq -n
+echo $template | jq
 # jq -n '[1,2,3]'
