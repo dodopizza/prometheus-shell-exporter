@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/examples", "*.json")
+	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics_examples", "*.json")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

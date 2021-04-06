@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	ps := PS.NewShellExecutor("/workspaces/prometheus-shell-exporter/examples/pse_example.sh")
+	ps := PS.NewShellExecutor("/workspaces/prometheus-shell-exporter/metrics/pse_example.sh")
 	stdOut, stdErr, err := ps.Execute()
 	if err != nil {
 		println(err.Error())
