@@ -11,7 +11,7 @@ import (
 type metrics struct {
 	totalScrapes  prometheus.Counter
 	failedScrapes prometheus.Counter
-	shellMetrics  []*prometheus.GaugeVec
+	shellMetrics  []*shellMetrics
 }
 
 type shellMetric struct {
@@ -20,33 +20,56 @@ type shellMetric struct {
 }
 
 type shellMetrics struct {
-	Name    string
-	Metrics []shellMetric
+	fName       string
+	metrics     []shellMetric
+	gaugeMetric *prometheus.GaugeVec
 }
 
-func getMetrics(fname string) *shellMetrics {
-	s := &shellMetrics{
-		Name: sanitizePromLabelName(GetFileName(fname)),
-	}
-	s.readFromFile(fname)
-
-	return s
+func (sm *shellMetrics) updateData() {
+	sm.readFromFile(sm.fName)
 }
 
-func newMetrics(namespace string, scripts []string) *metrics {
-	return &metrics{
-		totalScrapes: prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: namespace,
-			Name:      "scrapes_total",
-			Help:      "Count of total scrapes",
-		}),
+func (sm *shellMetrics) getName() string {
+	return sanitizePromLabelName(GetFileName(sm.fName))
+}
 
-		failedScrapes: prometheus.NewCounter(prometheus.CounterOpts{
-			Namespace: namespace,
-			Name:      "failed_scrapes_total",
-			Help:      "Count of failed scrapes",
-		}),
+func (sm *shellMetrics) getLabels() (labels []string) {
+	for lk, _ := range sm.metrics[0].Labels {
+		labels = append(labels, lk)
 	}
+	return
+}
+
+func newMetrics(namespace string, scripts []string) (result *metrics) {
+
+	result = &metrics{}
+
+	for _, script := range scripts {
+		metric := &shellMetrics{fName: script}
+		metric.updateData()
+		metric.gaugeMetric = prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
+				Namespace: namespace,
+				Name:      metric.getName(),
+			},
+			metric.getLabels(),
+		)
+		result.shellMetrics = append(result.shellMetrics, metric)
+	}
+
+	result.totalScrapes = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: namespace,
+		Name:      "scrapes_total",
+		Help:      "Count of total scrapes",
+	})
+
+	result.failedScrapes = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: namespace,
+		Name:      "failed_scrapes_total",
+		Help:      "Count of failed scrapes",
+	})
+
+	return
 }
 
 func sanitizePromLabelName(str string) string {
@@ -63,7 +86,7 @@ func (pm *shellMetrics) readFromFile(fname string) (err error) {
 		return
 	}
 	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&pm.Metrics)
+	err = decoder.Decode(&pm.metrics)
 	if err != nil {
 		return
 	}
