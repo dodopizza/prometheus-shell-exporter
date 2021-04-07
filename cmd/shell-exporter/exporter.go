@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 
-	shellExecutor "github.com/dodopizza/prometheus-shell-exporter/pkg/shell-executor/go"
+	scriptExecutor "github.com/dodopizza/prometheus-shell-exporter/pkg/script-executor/go"
 )
 
 type Exporter struct {
@@ -68,15 +68,14 @@ func getDataFromFile(script string) (metricsData []shellMetric, err error) {
 }
 
 func getDataFromShellExecutor(script string) (metricsData []shellMetric, err error) {
-	exec := shellExecutor.NewShellExecutor(script)
-	stdOut, _, err := exec.Execute()
+	exec := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeBash)
+	stdOut, _, err := exec.Execute(script)
 	if err != nil {
 		log.Error().Msg(err.Error())
 	}
 
 	decoder := json.NewDecoder(strings.NewReader(stdOut))
 	err = decoder.Decode(&metricsData)
-	println(stdOut)
 
 	return
 }
