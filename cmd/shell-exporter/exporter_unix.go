@@ -1,3 +1,5 @@
+// +build !windows
+
 package main
 
 import (
@@ -6,18 +8,15 @@ import (
 	"os"
 	"path"
 
+	exporter "github.com/dodopizza/prometheus-shell-exporter/internal/shell-exporter/go"
 	"github.com/rs/zerolog/log"
-
-	"net/http"
 )
-
-var appVersion = "0.0.000" // go build -ldflags "-X main.appConfigVersion=1.2.345"
 
 func processAppArguments() (scriptsDir string, port int) {
 	var showHelpInfo bool
 	var showAppVersion bool
 
-	flag.StringVar(&scriptsDir, "f", "metrics", "scripts dir")
+	flag.StringVar(&scriptsDir, "f", "../../metrics", "scripts dir")
 	flag.IntVar(&port, "port", 9360, "exporter port")
 	flag.BoolVar(&showHelpInfo, "help", false, "help info")
 	flag.BoolVar(&showAppVersion, "version", false, "app version info")
@@ -37,16 +36,12 @@ func processAppArguments() (scriptsDir string, port int) {
 	return
 }
 
-func main() {
+func run() {
 
 	scriptsDir, port := processAppArguments()
 
-	exp := NewExporter(scriptsDir, port)
-
-	if err := exp.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal().
-			Stack().
-			Err(err).
-			Msg("Server stopped unexpectedly")
+	err := exporter.Run(scriptsDir, port)
+	if err != nil {
+		log.Fatal().Msg(err.Error())
 	}
 }
