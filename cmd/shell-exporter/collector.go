@@ -32,7 +32,7 @@ func (sm *shellMetric) getLabels() (labels []string) {
 	return
 }
 
-func getData(fname string) (metricsData []shellMetric) {
+func getData(fname string) (metricsData []shellMetric, err error) {
 	file, err := os.Open(fname)
 	if err != nil {
 		return
@@ -49,9 +49,15 @@ func getData(fname string) (metricsData []shellMetric) {
 func NewCollector(scripts []string) *Collector {
 	return &Collector{
 		metrics: &metrics{
-			totalScrapes:  nil,
-			failedScrapes: nil,
-			gaugeMetric:   map[string]*prometheus.GaugeVec{},
+			totalScrapes: prometheus.NewCounter(prometheus.CounterOpts{
+				Name: "scrapes_total",
+				Help: "Count of total scrapes",
+			}),
+			failedScrapes: prometheus.NewCounter(prometheus.CounterOpts{
+				Name: "scrapes_failed_total",
+				Help: "Count of total failed scrapes",
+			}),
+			gaugeMetric: map[string]*prometheus.GaugeVec{},
 		},
 		scripts: scripts,
 	}
@@ -64,28 +70,17 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect for prometheus.Collector interface implementation
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
-
-	if c.metrics.totalScrapes == nil {
-		c.metrics.totalScrapes = prometheus.NewCounter(prometheus.CounterOpts{
-			Name: "scrapes_total",
-			Help: "Count of total scrapes",
-		})
-	}
 	c.metrics.totalScrapes.Inc()
 	ch <- c.metrics.totalScrapes
 
-	if c.metrics.failedScrapes == nil {
-		c.metrics.failedScrapes = prometheus.NewCounter(prometheus.CounterOpts{
-			Name: "scrapes_failed_total",
-			Help: "Count of total failed scrapes",
-		})
-	}
-	c.metrics.failedScrapes.Inc()
-	ch <- c.metrics.failedScrapes
-
 	for _, script := range c.scripts {
 		scriptName := sanitizePromLabelName(GetFileName(script))
-		metrics := getData(script)
+		metrics, err := getData(script)
+
+		if err != nil {
+			c.metrics.failedScrapes.Inc()
+			ch <- c.metrics.failedScrapes
+		}
 
 		if _, ok := c.metrics.gaugeMetric[scriptName]; !ok {
 			m := prometheus.NewGaugeVec(
