@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
+
+	shellExecutor "github.com/dodopizza/prometheus-shell-exporter/pkg/shell-executor/go"
 )
 
 type Exporter struct {
@@ -18,7 +21,8 @@ type Exporter struct {
 
 func NewExporter() *Exporter {
 
-	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics_examples", "*.json")
+	// scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics_examples", "*.json")
+	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics", "*.sh")
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
@@ -31,7 +35,7 @@ func NewExporter() *Exporter {
 
 	collector := NewCollector(
 		scripts,
-		getDataFromFile,
+		getDataFromShellExecutor,
 	)
 
 	registry := prometheus.NewRegistry()
@@ -60,5 +64,19 @@ func getDataFromFile(script string) (metricsData []shellMetric, err error) {
 	if err != nil {
 		return
 	}
+	return
+}
+
+func getDataFromShellExecutor(script string) (metricsData []shellMetric, err error) {
+	exec := shellExecutor.NewShellExecutor(script)
+	stdOut, _, err := exec.Execute()
+	if err != nil {
+		log.Error().Msg(err.Error())
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(stdOut))
+	err = decoder.Decode(&metricsData)
+	println(stdOut)
+
 	return
 }
