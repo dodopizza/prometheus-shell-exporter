@@ -38,8 +38,6 @@ func (se *ScriptExecutor) Execute(script string, args ...string) (stdOut string,
 
 	var cmd *exec.Cmd
 
-	println(filepath.Ext(script))
-
 	if se.shellType == ShellTypeAutodetect {
 		switch filepath.Ext(script) {
 		case ".ps1":
