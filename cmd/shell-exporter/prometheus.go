@@ -64,6 +64,12 @@ func (pe *PromExporter) NewGaugeVec(opts prometheus.GaugeOpts, labelNames []stri
 	return
 }
 
+func (pe *PromExporter) NewGaugeFunc(opts prometheus.GaugeOpts, function func() float64) (pf prometheus.GaugeFunc) {
+	pf = prometheus.NewGaugeFunc(opts, function)
+	pe.registry.MustRegister(pf)
+	return
+}
+
 func (pm *PromMetrics) ReadFromFile(fname string) (err error) {
 	file, err := os.Open(fname)
 	if err != nil {

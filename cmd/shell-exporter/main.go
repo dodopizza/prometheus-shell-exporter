@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func main() {
@@ -23,6 +25,16 @@ func main() {
 		pe.NewGaugeVecFromPromMetrics(p)
 		pm = append(pm, &p)
 	}
+
+	pe.NewGaugeFunc(
+		prometheus.GaugeOpts{
+			Name:        "HelloKitty",
+			ConstLabels: map[string]string{},
+		},
+		func() float64 {
+			return 1
+		},
+	)
 
 	err = pe.Serve()
 	if err != nil {
