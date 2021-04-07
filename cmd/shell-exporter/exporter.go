@@ -19,10 +19,9 @@ type Exporter struct {
 	*http.Server
 }
 
-func NewExporter() *Exporter {
+func NewExporter(scriptsDir string) *Exporter {
 
-	// scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics_examples", "*.json")
-	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics", "*.sh")
+	scripts, err := WalkMatch(scriptsDir, "*")
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
@@ -68,7 +67,7 @@ func getDataFromFile(script string) (metricsData []shellMetric, err error) {
 }
 
 func getDataFromShellExecutor(script string) (metricsData []shellMetric, err error) {
-	exec := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeBash)
+	exec := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeAutodetect)
 	stdOut, _, err := exec.Execute(script)
 	if err != nil {
 		log.Error().Msg(err.Error())

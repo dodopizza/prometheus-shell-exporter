@@ -63,6 +63,10 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 		scriptName := sanitizePromLabelName(GetFileName(script))
 		metrics, err := c.getDataFunc(script)
 
+		if len(metrics) <= 0 {
+			continue
+		}
+
 		if err != nil {
 			c.metrics.failedScrapes.Inc()
 			ch <- c.metrics.failedScrapes
