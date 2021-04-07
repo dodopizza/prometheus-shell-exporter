@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 )
 
 func WalkMatch(root, pattern string) ([]string, error) {
@@ -30,4 +31,12 @@ func WalkMatch(root, pattern string) ([]string, error) {
 func GetFileName(fname string) string {
 	fname = filepath.Base(fname)
 	return fname[0 : len(fname)-len(filepath.Ext(fname))]
+}
+
+func sanitizePromLabelName(str string) string {
+	re := regexp.MustCompile(`[\.\-]`)
+	result := re.ReplaceAllString(str, "_")
+	re = regexp.MustCompile(`^\d`)
+	result = re.ReplaceAllString(result, "_$0")
+	return result
 }

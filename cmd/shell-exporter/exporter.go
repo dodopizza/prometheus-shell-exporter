@@ -7,6 +7,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/zerolog/log"
 )
 
 type Exporter struct {
@@ -14,9 +15,19 @@ type Exporter struct {
 }
 
 func NewExporter() *Exporter {
+
+	scripts, err := WalkMatch("/workspaces/prometheus-shell-exporter/metrics_examples", "*.json")
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+
+	if len(scripts) <= 0 {
+		log.Fatal().Msg("No scripts to serve")
+	}
+
 	mux := &http.ServeMux{}
 
-	collector := NewCollector()
+	collector := NewCollector(scripts)
 	registry := prometheus.NewRegistry()
 
 	registry.MustRegister(collector)
