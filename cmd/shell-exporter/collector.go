@@ -1,16 +1,14 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
-
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 // Collector type for prometheus.Collector interface implementation
 type Collector struct {
-	metrics *metrics
-	scripts []string
+	metrics     *metrics
+	scripts     []string
+	getDataFunc func(string) ([]shellMetric, error)
 }
 
 //
@@ -32,21 +30,8 @@ func (sm *shellMetric) getLabels() (labels []string) {
 	return
 }
 
-func getData(fname string) (metricsData []shellMetric, err error) {
-	file, err := os.Open(fname)
-	if err != nil {
-		return
-	}
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&metricsData)
-	if err != nil {
-		return
-	}
-	return
-}
-
 // NewCollector is Collector constructor
-func NewCollector(scripts []string) *Collector {
+func NewCollector(scripts []string, getDataFunc func(string) ([]shellMetric, error)) *Collector {
 	return &Collector{
 		metrics: &metrics{
 			totalScrapes: prometheus.NewCounter(prometheus.CounterOpts{
@@ -59,7 +44,8 @@ func NewCollector(scripts []string) *Collector {
 			}),
 			gaugeMetric: map[string]*prometheus.GaugeVec{},
 		},
-		scripts: scripts,
+		scripts:     scripts,
+		getDataFunc: getDataFunc,
 	}
 }
 
@@ -75,7 +61,7 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, script := range c.scripts {
 		scriptName := sanitizePromLabelName(GetFileName(script))
-		metrics, err := getData(script)
+		metrics, err := c.getDataFunc(script)
 
 		if err != nil {
 			c.metrics.failedScrapes.Inc()

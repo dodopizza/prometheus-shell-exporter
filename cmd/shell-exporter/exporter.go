@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -27,7 +29,11 @@ func NewExporter() *Exporter {
 
 	mux := &http.ServeMux{}
 
-	collector := NewCollector(scripts)
+	collector := NewCollector(
+		scripts,
+		getDataFromFile,
+	)
+
 	registry := prometheus.NewRegistry()
 
 	registry.MustRegister(collector)
@@ -42,4 +48,17 @@ func NewExporter() *Exporter {
 	}
 
 	return &Exporter{server}
+}
+
+func getDataFromFile(script string) (metricsData []shellMetric, err error) {
+	file, err := os.Open(script)
+	if err != nil {
+		return
+	}
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&metricsData)
+	if err != nil {
+		return
+	}
+	return
 }
