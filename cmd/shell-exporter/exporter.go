@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -18,9 +19,14 @@ type Exporter struct {
 	*http.Server
 }
 
-func NewExporter(scriptsDir string) *Exporter {
+func NewExporter(scriptsDir string, port int) *Exporter {
 
-	scripts, err := WalkMatch(scriptsDir, "*")
+	scriptDirAbs, err := filepath.Abs(scriptsDir)
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+
+	scripts, err := WalkMatch(scriptDirAbs, "*")
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
@@ -42,7 +48,7 @@ func NewExporter(scriptsDir string) *Exporter {
 
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", 9090),
+		Addr:         fmt.Sprintf(":%d", port),
 		WriteTimeout: time.Second * 60,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
