@@ -18,17 +18,15 @@ function gauge_vector(){
     jq -n \
         --arg value "${1}" \
         --arg label1 "${2}" \
-        --arg label2 "${3}" \
         '{
             "value": $value | tonumber,
             "labels": {
-                "label1": $label1,
-                "label2": $label2
+                "example": $label1,
             }
         }'
 }
 
 for i in $(seq 1 10)
 do
-    add_gauge_vector ${i} "Label1 for ${i}" "Label2 for ${i}"
+    add_gauge_vector ${RANDOM} "for_${i}"
 done
