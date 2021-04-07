@@ -30,8 +30,8 @@ func (sm *shellMetric) getLabels() (labels []string) {
 	return
 }
 
-// NewCollector is Collector constructor
-func NewCollector(scripts []string, getDataFunc func(string) ([]shellMetric, error)) *Collector {
+// newCollector is collector constructor
+func newCollector(scripts []string, getDataFunc func(string) ([]shellMetric, error)) *Collector {
 	return &Collector{
 		metrics: &metrics{
 			totalScrapes: prometheus.NewCounter(prometheus.CounterOpts{
@@ -60,7 +60,7 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 	ch <- c.metrics.totalScrapes
 
 	for _, script := range c.scripts {
-		scriptName := sanitizePromLabelName(GetFileName(script))
+		scriptName := sanitizePromLabelName(getFileName(script))
 		metrics, err := c.getDataFunc(script)
 
 		if len(metrics) <= 0 {

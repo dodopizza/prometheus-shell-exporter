@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	err := exporter.Run("examples/", 9999)
+	err := exporter.ServeMetrics("examples/", "/", 9999)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

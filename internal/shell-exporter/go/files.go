@@ -1,12 +1,36 @@
 package shellexporter
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"regexp"
 )
 
-func WalkMatch(root, pattern string) ([]string, error) {
+func getMetricsScripts(scriptsDir string) (scripts []string, err error) {
+	scriptDirAbs, err := filepath.Abs(scriptsDir)
+	if err != nil {
+		return
+	}
+
+	for _, ext := range []string{"*.ps1", "*.sh"} {
+		s, err := walkMatch(scriptDirAbs, ext)
+		if err != nil {
+			return []string{}, err
+		}
+		scripts = append(scripts, s...)
+
+	}
+
+	if len(scripts) <= 0 {
+		err = errors.New("no scripts to serve")
+		return
+	}
+
+	return
+}
+
+func walkMatch(root, pattern string) ([]string, error) {
 	var matches []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -28,7 +52,7 @@ func WalkMatch(root, pattern string) ([]string, error) {
 	return matches, nil
 }
 
-func GetFileName(fname string) string {
+func getFileName(fname string) string {
 	fname = filepath.Base(fname)
 	return fname[0 : len(fname)-len(filepath.Ext(fname))]
 }
