@@ -5,8 +5,9 @@ import (
 )
 
 func main() {
-	ps := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeBash)
-	stdOut, stdErr, err := ps.Execute("/workspaces/prometheus-shell-exporter/metrics/pse_example.sh")
+	ps := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeAutodetect)
+	// stdOut, stdErr, err := ps.Execute("/workspaces/prometheus-shell-exporter/metrics/pse_example.sh")
+	stdOut, stdErr, err := ps.Execute("/workspaces/prometheus-shell-exporter/metrics/pse_tcp_connection_metrics.ps1")
 	if err != nil {
 		println(err.Error())
 	}

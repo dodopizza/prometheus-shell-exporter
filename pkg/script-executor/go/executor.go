@@ -3,10 +3,12 @@ package script_executor
 import (
 	"bytes"
 	"os/exec"
+	"path/filepath"
 )
 
 const (
 	ShellTypeDefault = iota
+	ShellTypeAutodetect
 	ShellTypePowerShell
 	ShellTypeBash
 )
@@ -21,25 +23,41 @@ func NewScriptExecutor(shellType int) *ScriptExecutor {
 	}
 }
 
-func (se *ScriptExecutor) executePowerShellScript(script string, args ...string) (cmd *exec.Cmd) {
-	ps, _ := exec.LookPath("powershell.exe")
+func (se *ScriptExecutor) preparePowerShellScript(script string, args ...string) (cmd *exec.Cmd, err error) {
+	ps, err := exec.LookPath("powershell.exe")
 	args = append([]string{"-NoProfile", "-NonInteractive", script}, args...)
-	return exec.Command(ps, args...)
+	cmd = exec.Command(ps, args...)
+	return
 }
 
-func (se *ScriptExecutor) executeScript(script string, args ...string) (cmd *exec.Cmd) {
-	return exec.Command(script, args...)
+func (se *ScriptExecutor) prepareScript(script string, args ...string) (cmd *exec.Cmd, err error) {
+	return exec.Command(script, args...), nil
 }
 
 func (se *ScriptExecutor) Execute(script string, args ...string) (stdOut string, stdErr string, err error) {
 
 	var cmd *exec.Cmd
 
+	println(filepath.Ext(script))
+
+	if se.shellType == ShellTypeAutodetect {
+		switch filepath.Ext(script) {
+		case ".ps1":
+			se.shellType = ShellTypePowerShell
+		default:
+			se.shellType = ShellTypeDefault
+		}
+	}
+
 	switch se.shellType {
 	case ShellTypePowerShell:
-		cmd = se.executePowerShellScript(script, args...)
+		cmd, err = se.preparePowerShellScript(script, args...)
 	default:
-		cmd = se.executeScript(script, args...)
+		cmd, err = se.prepareScript(script, args...)
+	}
+
+	if err != nil {
+		return
 	}
 
 	var stdout bytes.Buffer
