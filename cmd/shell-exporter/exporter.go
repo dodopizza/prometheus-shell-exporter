@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -51,19 +50,6 @@ func NewExporter(scriptsDir string) *Exporter {
 	}
 
 	return &Exporter{server}
-}
-
-func getDataFromFile(script string) (metricsData []shellMetric, err error) {
-	file, err := os.Open(script)
-	if err != nil {
-		return
-	}
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&metricsData)
-	if err != nil {
-		return
-	}
-	return
 }
 
 func getDataFromShellExecutor(script string) (metricsData []shellMetric, err error) {

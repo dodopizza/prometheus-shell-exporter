@@ -24,7 +24,7 @@ type shellMetric struct {
 }
 
 func (sm *shellMetric) getLabels() (labels []string) {
-	for lk, _ := range sm.Labels {
+	for lk := range sm.Labels {
 		labels = append(labels, lk)
 	}
 	return

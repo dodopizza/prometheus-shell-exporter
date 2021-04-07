@@ -1,4 +1,4 @@
-package script_executor
+package scriptexecutor
 
 import (
 	"bytes"
