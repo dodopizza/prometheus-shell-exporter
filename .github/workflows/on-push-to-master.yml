@@ -44,8 +44,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/shell-exporter-1.2.34.linux.amd64.zip
-          asset_name: shell-exporter-1.2.34.linux.amd64.zip
+          asset_path: bin/shell-exporter-${{ env.APP_VERSION }}.linux.amd64.zip
+          asset_name: shell-exporter-${{ env.APP_VERSION }}.linux.amd64.zip
           asset_content_type: application/zip
 
       - name: Upload release asset for windows amd64
@@ -54,6 +54,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/shell-exporter-1.2.34.windows.amd64.zip
-          asset_name: shell-exporter-1.2.34.windows.amd64.zip
+          asset_path: bin/shell-exporter-${{ env.APP_VERSION }}.windows.amd64.zip
+          asset_name: shell-exporter-${{ env.APP_VERSION }}.windows.amd64.zip
           asset_content_type: application/zip
