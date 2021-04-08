@@ -18,7 +18,7 @@ if [ -n "${APP_VERSION:-}" ]; then
 fi
 
 echo "[~] Cleanup bin/ dir"
-rm -rf "${project_dir}/bin/*"
+rm -rf "${project_dir}/bin/"
 
 for arc in amd64; do
     for os in linux windows; do
@@ -45,7 +45,10 @@ for arc in amd64; do
             done
 
             echo "[~] Archive to ${app_folder}.zip"
-            zip -r "${app_folder_abs}.zip" "${app_folder_abs}"
+            (
+                cd "${project_dir}/bin/"
+                zip -r "${app_folder}.zip" "${app_folder}"
+            )
         done
     done
 done
