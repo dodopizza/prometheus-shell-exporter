@@ -24,8 +24,13 @@ Shell Exporter exposes metrics based on your `Powershell` or `Bash` scripts name
 
 ## Installing as Windows Service
 
-1. Download binary from releases
-2. Install it via [nssm](https://nssm.cc/) - `nssm install <servicename> <program> [<arguments>]`, e.g. `nssm install shell_exporter ./shell-exporter.exe -f ./scripts`
+1. Download binary
+2. Install [nssm](https://nssm.cc/) via [Chocolatey](https://community.chocolatey.org/packages/NSSM)
+
+| Action    | Command                                                          |
+| ----------|------------------------------------------------------------------|
+| install   | nssm install shell_exporter C:\shell-exporter.exe -f C:\scripts  |
+| remove    | nssm remove shell_exporter confirm                               |
 
 ## Development
 
