@@ -13,20 +13,20 @@
 - [x] Introduce project style guide by adding .editorconfig.
 - Required GitHub files:
   - [] README.md - translate to English. Possibly update or rewrite. Make references for initial project.
-  - [] LICENSE - Apache 2.0
+  - [x] LICENSE - Apache 2.0
   - [x] .github/CODE_OF_CONDUCT - just copy form <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CODE_OF_CONDUCT.md>
-  - [] .github/CONTRIBUTING.md - could be build based on <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CONTRIBUTING.md>
-  - [] .github/ISSUE_TEMPLATE - add issue templates [optional]
+  - [x] .github/CONTRIBUTING.md - could be build based on <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CONTRIBUTING.md>
+  - [x] .github/ISSUE_TEMPLATE - add issue templates [optional]
 - Project management:
-  - [] Move all features/bugs/todos to Issues.
-  - [] Create Wiki if needed [optional]
-  - [] Talk about PR policy.
+  - [x] Move all features/bugs/todos to Issues.
+  - [x] Create Wiki if needed [optional]
+  - [x] Talk about PR policy.
 - Release management:
-  - [] Talk about release management on GitHub.
-  - [] SemVer and proper versioning and tagging.
+  - [x] Talk about release management on GitHub.
+  - [x] SemVer and proper versioning and tagging.
 - CI/CD:
-  - [] Possibly we could keep GitLab, but we need to think about CI for forks.
-  - [] Security check for CI/CD workflows.
+  - [x] Possibly we could keep GitLab, but we need to think about CI for forks.
+  - [x] Security check for CI/CD workflows.
   - [] Branch rules (protect master branch).
 - Move to Open Source:
   - [] Double-check this checklist
