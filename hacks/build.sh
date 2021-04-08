@@ -11,11 +11,43 @@ project_dir="$(
     pwd
 )"
 
-ldflags="-s -w"
 
-for os in linux windows; do
-    GOOS=${os} GOARCH='amd64' CGO_ENABLED=0 go build \
-        -ldflags="${ldflags}" \
-        -o "${project_dir}/bin/shell-exporter-${os}" \
-        "${project_dir}/cmd/shell-exporter"
+ldflags="-s -w"
+if [ -n "${APP_VERSION:-}" ]; then
+    ldflags+=" -X main.appVersion=${APP_VERSION}"
+fi
+
+echo "[~] Cleanup bin/ dir"
+rm -rf "${project_dir}/bin/*"
+
+for arc in amd64; do
+    for os in linux windows; do
+        for app in 'shell-exporter'; do
+
+            app_folder="${app}-${APP_VERSION:-draft}.${os}.${arc}"
+            app_folder_abs="${project_dir}/bin/${app_folder}"
+            app_extension=""
+
+            case ${os} in
+                windows) app_extension=".exe" ;;
+            esac
+
+            echo "[~] Build ${app} for ${os} ${arc}"
+            GOOS=${os} GOARCH=${arc} CGO_ENABLED=0 go build \
+                -ldflags="${ldflags}" \
+                -o "${app_folder_abs}/${app}${app_extension}" \
+                "${project_dir}/cmd/${app}"
+
+
+            for artifact in 'metrics'; do
+                echo "[~] Add ${artifact} artifacts"
+                cp -r "${project_dir}/${artifact}" "${app_folder_abs}/"
+            done
+
+            echo "[~] Archive to ${app_folder}.zip"
+            zip -r "${app_folder_abs}.zip" "${app_folder_abs}"
+        done
+    done
 done
+
+echo "[.] Done"
