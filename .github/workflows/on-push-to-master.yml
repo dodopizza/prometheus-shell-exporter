@@ -1,0 +1,59 @@
+name: Build draft-release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Push to master
+    runs-on: ubuntu-latest
+    env:
+      APP_VERSION: "0.1.${{ github.run_number }}"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: Check go version
+        run: go version
+
+      - name: Build binaries
+        run: make build
+
+      - name: Create draft release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.APP_VERSION }}
+          release_name: v${{ env.APP_VERSION }}
+          draft: true
+          prerelease: false
+
+      - name: Upload release asset for linux amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/shell-exporter-1.2.34.linux.amd64.zip
+          asset_name: shell-exporter-1.2.34.linux.amd64.zip
+          asset_content_type: application/zip
+
+      - name: Upload release asset for windows amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/shell-exporter-1.2.34.windows.amd64.zip
+          asset_name: shell-exporter-1.2.34.windows.amd64.zip
+          asset_content_type: application/zip
