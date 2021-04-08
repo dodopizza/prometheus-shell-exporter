@@ -12,14 +12,14 @@ import (
 	"github.com/rs/zerolog/pkgerrors"
 )
 
-var appVersion = "0.0.000" // go build -ldflags "-X main.appConfigVersion=1.2.345"
+var appVersion = "0.0.000" // go build -ldflags "-X main.appVersion=1.2.345"
 
 // Process command-line flag parsing.
 func processAppFlags() (scriptsDir string, port int) {
 	var showHelpInfo bool
 	var showAppVersion bool
 
-	flag.StringVar(&scriptsDir, "f", "../../metrics", "scripts dir")
+	flag.StringVar(&scriptsDir, "f", "./metrics", "scripts dir")
 	flag.IntVar(&port, "port", 9360, "exporter port")
 	flag.BoolVar(&showHelpInfo, "help", false, "help info")
 	flag.BoolVar(&showAppVersion, "version", false, "app version info")
