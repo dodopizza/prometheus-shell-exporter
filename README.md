@@ -34,7 +34,7 @@ Shell Exporter exposes metrics based on your `Powershell` or `Bash` scripts name
 
 ## Development
 
-1. Make branch from `main`
+1. Make branch from `master`
 2. Reopen repo at [vscode container](https://code.visualstudio.com/docs/remote/containers)
 3. Make necessary changes
 4. Push it to branch and make pull-request
