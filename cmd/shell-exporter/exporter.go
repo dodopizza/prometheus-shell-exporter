@@ -44,8 +44,8 @@ func init() {
 }
 
 func main() {
-	log.Debug().Msg("start exporter")
 	scriptsDir, port := processAppFlags()
+	log.Debug().Msg("start exporter")
 
 	err := exporter.ServeMetrics(scriptsDir, "/metrics", port)
 	if err != nil {
