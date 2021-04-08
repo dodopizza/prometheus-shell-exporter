@@ -30,6 +30,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           args: "--tests=false"
 
+      - name: Tests
+        run: make test
+
       - name: Build binaries
         run: make build
 

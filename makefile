@@ -5,6 +5,9 @@ build:
 .PHONY: tidy
 tidy:
 	go mod tidy -v
+.PHONY: test
+test:
+	go test -race -cover -v ./...
 
 .PHONY: lint
 lint:
