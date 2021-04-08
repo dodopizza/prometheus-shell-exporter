@@ -1,20 +1,20 @@
 # Open Source TODO
 
-- [] Security: check secrets/connection strings.
-- [] Check dependencies (security or private repository).
+- [x] Security: check secrets/connection strings.
+- [x] Check dependencies (security or private repository).
 - Files hierarchy and IDE support:
-  - [] Create solution file in the project root.
-  - [] Update .gitignore if needed.
+  - [x] Create solution file in the project root.
+  - [x] Update .gitignore if needed.
 - Code:
-  - [] Check code (refactoring if needed).
-  - [] Check namespaces.
-  - [] Check language. All coments in code should be in English.
-- [] Change project name. Current name of the project does not reflect its purpose.
-- [] Introduce project style guide by adding .editorconfig.
+  - [x] Check code (refactoring if needed).
+  - [x] Check namespaces.
+  - [x] Check language. All coments in code should be in English.
+- [x] Change project name. Current name of the project does not reflect its purpose.
+- [x] Introduce project style guide by adding .editorconfig.
 - Required GitHub files:
   - [] README.md - translate to English. Possibly update or rewrite. Make references for initial project.
   - [] LICENSE - Apache 2.0
-  - [] .github/CODE_OF_CONDUCT - just copy form <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CODE_OF_CONDUCT.md>
+  - [x] .github/CODE_OF_CONDUCT - just copy form <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CODE_OF_CONDUCT.md>
   - [] .github/CONTRIBUTING.md - could be build based on <https://github.com/dodopizza/httpclient-resilience-policies/blob/master/.github/CONTRIBUTING.md>
   - [] .github/ISSUE_TEMPLATE - add issue templates [optional]
 - Project management:
@@ -29,9 +29,9 @@
   - [] Security check for CI/CD workflows.
   - [] Branch rules (protect master branch).
 - Move to Open Source:
-  - [ ] Double-check this checklist
-  - [ ] Make project public on GitHub.
+  - [] Double-check this checklist
+  - [] Make project public on GitHub.
   - [] Make first release.
-  - [ ] Write your name to the Dodo Open Source History here: <https://app.nuclino.com/dodopizza/Development/-open-source-Dodo-26ba6965-499d-4ad8-9dbb-400e0108faba>
-  - [ ] Delete this TODO.
-  - [ ] Create post to #itnews.
+  - [] Write your name to the Dodo Open Source History here: <https://app.nuclino.com/dodopizza/Development/-open-source-Dodo-26ba6965-499d-4ad8-9dbb-400e0108faba>
+  - [] Delete this TODO.
+  - [] Create post to #itnews.
