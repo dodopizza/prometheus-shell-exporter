@@ -24,6 +24,12 @@ jobs:
       - name: Check go version
         run: go version
 
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          args: "--tests=false"
+
       - name: Build binaries
         run: make build
 
