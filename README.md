@@ -4,7 +4,7 @@ Shell Exporter can execute `Powershell` or `Bash` scripts and transform its outp
 
 ## Metrics
 
-Shell Exporter exposes metrics based on your `Powershell` or `Bash` scripts names.
+Shell Exporter exposes metrics based on your `Powershell` or `Bash` scripts names. Examples of scripts can be finded at `metrics` folder
 
 | Script name                                      | Metric name                                  |
 | -------------------------------------------------|----------------------------------------------|
