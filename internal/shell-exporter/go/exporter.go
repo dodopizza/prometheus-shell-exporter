@@ -7,6 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
@@ -20,6 +22,7 @@ func ServeMetrics(scriptsDir string, metricsHTTPEndpoint string, port int) (err 
 	}
 
 	mux := &http.ServeMux{}
+	mux.HandleFunc("/healthz", HealthHandler)
 	mux.Handle(metricsHTTPEndpoint, expHandler)
 
 	server := &http.Server{
@@ -58,6 +61,12 @@ func NewExporterHandler(scriptsDir string) (handler http.Handler, err error) {
 	return
 }
 
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	_, err := w.Write([]byte("OK"))
+	if err != nil {
+		log.Fatal().Stack().Err(err).Msg("")
+	}
+}
 func getDataFromShellExecutor(script string) (metricsData []shellMetric, err error) {
 	exec := scriptExecutor.NewScriptExecutor(scriptExecutor.ShellTypeAutodetect)
 	stdOut, _, err := exec.Execute(script)
