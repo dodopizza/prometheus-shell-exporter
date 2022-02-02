@@ -16,4 +16,4 @@ lint:
 
 .PHONY: run
 run:
-	cd ./cmd/shell-exporter/ && go run .
+	cd ./cmd/shell-exporter/ && go run . --f ../../metrics
