@@ -11,7 +11,6 @@ type Collector struct {
 	getDataFunc func(string) ([]shellMetric, error)
 }
 
-//
 type metrics struct {
 	totalScrapes  prometheus.Counter
 	failedScrapes prometheus.Counter
@@ -19,7 +18,7 @@ type metrics struct {
 }
 
 type shellMetric struct {
-	Value  int               `json:"value"`
+	Value  float64           `json:"value"`
 	Labels map[string]string `json:"labels"`
 }
 

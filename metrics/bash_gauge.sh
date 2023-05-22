@@ -30,3 +30,6 @@ for i in $(seq 1 10)
 do
     add_gauge_vector ${RANDOM} "for_${i}"
 done
+
+add_gauge_vector 1.5 "float_1.5"
+add_gauge_vector 0.5 "float_0.5"
